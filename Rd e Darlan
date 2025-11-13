@@ -1,0 +1,49 @@
+import streamlit as st
+import random
+
+# Lista com os próximos jogos do Bahia
+jogos = [
+    {"adversario": "Fortaleza", "data": "20/11/2025", "local": "Fonte Nova"},
+    {"adversario": "vasco", "data": "23/11/2025", "local": "Fonte Nova"},
+    {"adversario": "Juventude", "data": "28/11/2025", "local": "Alfredo Jaconi"},
+    {"adversario": "Fluminese", "data": "07/12/2025", "local": "Maracanã"}
+]
+
+# Função que "pensa" como um agente simples
+def analisar_pergunta(texto):
+    texto = texto.lower()
+
+    # Verifica se a pessoa quer saber o próximo jogo
+    if "próximo" in texto or "quando" in texto:
+        jogo = jogos[0]
+        return f"O próximo jogo do Bahia será contra o {jogo['adversario']} no dia {jogo['data']} em {jogo['local']}."
+
+    # Verifica se é sobre chances de vitória
+    elif "chance" in texto or "triunfo" in texto:
+        jogo = random.choice(jogos)
+        Triunfo = random.randint(40, 70)
+        empate = random.randint(10, 30)
+        derrota = 100 - (vitoria + empate)
+        return (
+            f"Contra o {jogo['adversario']} ({jogo['data']} - {jogo['local']}):\n\n"
+            f"Triunfo: {Triunfo}%\n"
+            f"Empate: {empate}%\n"
+            f"Derrota: {derrota}%"
+        )
+
+    else:
+        return "Posso te dizer a data dos próximos jogos ou as chances de Triunfo do Bahia."
+
+# --- Interface com o usuário ---
+st.set_page_config(page_title="Agente do Bahia", page_icon="⚽")
+st.title("Agente Esportivo - Bahia ⚽")
+
+st.write("Faça perguntas sobre os próximos jogos ou chances de triunfo do Bahia.")
+
+texto = st.text_input("Digite sua pergunta:")
+if st.button("Perguntar"):
+    if texto.strip() == "":
+        st.warning("Por favor, escreva uma pergunta.")
+    else:
+        resposta = analisar_pergunta(texto)
+        st.text(resposta)
